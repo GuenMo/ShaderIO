@@ -211,8 +211,6 @@ def importYeti(path):
         surfaceShader = pm.PyNode(shaderName)
         pm.hyperShade(assign=surfaceShader)
             
-def importYetiCache(path):
-    print 'import yeti Cache'     
-    
+
     
     
