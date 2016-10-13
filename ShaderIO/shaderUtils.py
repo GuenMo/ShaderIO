@@ -95,43 +95,6 @@ def importShader(path):
         return
     assignShader()
 
-'''
-def assignShader():
-    try:
-        shaderInfoNode = pm.PyNode('shaderInfoNode')
-    except:
-        print '"shaderInfoNode" not exist!'
-    
-    numAttr = shaderInfoNode.shaderInfos.numChildren()
-    
-    message = ''
-    for i in range(numAttr):
-        shaderInfos = json.loads(shaderInfoNode.attr('shaderInfos{}'.format(i)).get())
-        try:
-            pm.select(shaderInfos.get('geometry'))
-            
-            surfaceShader = pm.PyNode(shaderInfos.get('surfaceShader'))
-            pm.hyperShade(assign=surfaceShader)
-            pm.select(cl=True)    
-            try:
-                if shaderInfos.get('displacement'):
-                    displacement = pm.PyNode(shaderInfos.get('displacement'))
-                    sg = surfaceShader.outColor.outputs()[0]
-                    displacement.displacement.connect(sg.displacementShader)
-            except:
-                message += ( str(shaderInfos.get('displacement')) + '-->' + sg.name()+ '\n')
-        except:
-            message += ( str(shaderInfos.get('surfaceShader')) + '-->' + str(shaderInfos.get('geometry') )+ '\n')
-            
-
-    shaderInfoNode.unlock()
-    pm.delete(shaderInfoNode)
-    
-    if message:
-        print 'Failed list:\n'
-        print message
-'''
-    
 def assignShader():
     try:
         shaderInfoNode = pm.PyNode('shaderInfoNode')
