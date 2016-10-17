@@ -5,8 +5,7 @@ import json
 
 
 def getShagingEngine():
-    """
-    씬안에 Shadeing Engine을 검색해 리턴 합니다.
+    """씬안에 Shadeing Engine을 검색해 리턴 합니다.
     Returns:
         bool: True if successful, False otherwise.
 
