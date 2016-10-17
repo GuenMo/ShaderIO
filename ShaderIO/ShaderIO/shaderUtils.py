@@ -4,10 +4,26 @@ import pymel.all as pm
 import json
 
 
-###########################################
-# MATERIAL FUNCKTION FOR SHAPE
-###########################################
 def getShagingEngine():
+    """
+    씬안에 Shadeing Engine을 검색해 리턴 합니다.
+    Returns:
+        bool: True if successful, False otherwise.
+
+        The return type is optional and may be specified at the beginning of
+        the ``Returns`` section followed by a colon.
+
+        The ``Returns`` section may span multiple lines and paragraphs.
+        Following lines should be indented to match the first line.
+
+        The ``Returns`` section supports any reStructuredText formatting,
+        including literal blocks::
+
+            {
+                'param1': param1,
+                'param2': param2
+            }
+    """
     sgGrps = pm.ls(type='shadingEngine')
     validSgGrp = []
     for sg in sgGrps:
@@ -134,10 +150,6 @@ def assignShader():
         print 'Failed list:\n'
         print message
         
-###########################################
-# MATERIAL FUNCKTION FOR YETI
-###########################################    
-
 def getYetiInfo():
     nodes = pm.ls(type='pgYetiMaya')
     yetiInfo = {}
