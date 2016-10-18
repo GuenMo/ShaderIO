@@ -3,24 +3,14 @@
 import pymel.all as pm
 import json
 
-def getShagingEngine():
-    """Example function with types documented in the docstring.
-
-    `PEP 484`_ type annotations are supported. If attribute, parameter, and
-    return types are annotated according to `PEP 484`_, they do not need to be
-    included in the docstring:
-
-    Args:
-        param1 (int): The first parameter.
-        param2 (str): The second parameter.
-
-    Returns:
-        bool: The return value. True for success, False otherwise.
-
-    .. _PEP 484:
-        https://www.python.org/dev/peps/pep-0484/
-
+def getShadingEngine():
+    """씬안에 Shadeing Engine을 검색해 리턴 한다.
+    
+    :returns: [nt.ShadingEngine]
+    :rtype: list
+    
     """
+    
     sgGrps = pm.ls(type='shadingEngine')
     validSgGrp = []
     for sg in sgGrps:
@@ -29,10 +19,21 @@ def getShagingEngine():
             
     return validSgGrp        
 
-def getShaderInfo(sg):
-    surface      = sg.surfaceShader.inputs()
-    displacement = sg.displacementShader.inputs()
-    geometry     = pm.listConnections(sg, type='mesh')
+def getShaderInfo(shadingEngine):
+    """ 입력 받은 shading Engine으로 부터 surface shader, displacement, geometry 값을 얻어 
+    json으로 넘기기 위해  dict 으로 리턴 한다.
+    
+    :param shadingEngine: shading Engine
+    :type shadingEngine: nt.ShadingEngine
+    :returns: {'surfaceShader': surfaceShader, 'displacement':displacementShader, 'geometry':geometries}
+    :rtype: dict
+    
+    .. note:: geometry는 shape 이름들의 list 입니다.
+
+    """
+    surface      = shadingEngine.surfaceShader.inputs()
+    displacement = shadingEngine.displacementShader.inputs()
+    geometry     = pm.listConnections(shadingEngine, type='mesh')
     
     if surface:
         surfaceShaderName = surface[0].name()
@@ -53,7 +54,14 @@ def getShaderInfo(sg):
     return info
 
 def exportShader(path):
-    sgGrps = getShagingEngine()
+    """씬안에 쉐이딩 그룹으로 부터 정보를 모아 shaderInfoNode에 저장 한후 
+    입력 받은 경로에 shader를 저장 한다.
+    
+    :param path: 파일 경로
+    :type path: str
+    
+    """
+    sgGrps = getShadingEngine()
     
     shaderInfos = []
     exportList = []
@@ -99,8 +107,14 @@ def exportShader(path):
     finally:
         shaderInfoNode.unlock()
         pm.delete(shaderInfoNode)
-    
+            
 def importShader(path):
+    """입력 받은 경로에 shader를 import 한후 쉐이더를 적용 한다.
+    
+    :param path: 파일 경로
+    :type path: str
+    
+    """
     try:
         pm.importFile(path)
         print 'Success import {}'.format(path)
@@ -110,6 +124,16 @@ def importShader(path):
     assignShader()
 
 def assignShader():
+    """씬안에서 shaderInfoNode 노드를 검색 한다.\n
+    shaderInfoNode 노드에 shaderInfos# 어트리뷰트를 검색한다.\n
+    shaderInfos# 어트리뷰트의 값을 json 으로 가져 온다.\n
+    어트리뷰트의 geometry, surfaceShader, displacement 키 값을 가져 온다.\n
+    geometry에 surfaceShader, displacement 적용 한다.\n
+    shaderInfoNode 삭제 한다.
+    
+    .. warning:: 
+        씬안에 'shaderInfoNode' 노드가 없을 때 ``shaderInfoNode not exist!`` 예외 발생
+    """
     try:
         shaderInfoNode = pm.PyNode('shaderInfoNode')
     except:
@@ -149,6 +173,15 @@ def assignShader():
         print message
         
 def getYetiInfo():
+    '''씬안에 pgYetiMaya 검색해 적용된 쉐이더와 트렌스폼이 딕셔너리로 리턴 한다.
+    
+    :returns: {transform: shader ..}
+    :rtype: dict 
+    
+    .. note:: 
+        transform: pgYetiMaya 노드의 transform 이름\n
+        shader: pgYetiMaya 노드가 적용된 shader 이름
+    '''
     nodes = pm.ls(type='pgYetiMaya')
     yetiInfo = {}
     
@@ -189,6 +222,12 @@ def exportYeti(path):
         pm.delete(yetiInfoNode)
 
 def importYeti(path):
+    """입력 받은 경로에 shader를 import 한후 쉐이더를 적용 한다.
+    
+    :param path: 파일 경로
+    :type path: str
+    
+    """
     yetiInfo = getYetiInfo()
     if yetiInfo:
         for yetiNode, shader in yetiInfo.items():
