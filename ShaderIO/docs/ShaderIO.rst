@@ -6,7 +6,6 @@ Submodules
 
 .. toctree::
 
-   ShaderIO.shaderIOTool_run
    ShaderIO.shaderUI
    ShaderIO.shaderUtils
 

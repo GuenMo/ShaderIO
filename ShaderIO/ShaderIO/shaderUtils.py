@@ -3,33 +3,32 @@
 import pymel.all as pm
 import json
 
-
 def getShagingEngine():
-    """씬안에 Shadeing Engine을 검색해 리턴 합니다.
+    """Example function with types documented in the docstring.
+
+    `PEP 484`_ type annotations are supported. If attribute, parameter, and
+    return types are annotated according to `PEP 484`_, they do not need to be
+    included in the docstring:
+
+    Args:
+        param1 (int): The first parameter.
+        param2 (str): The second parameter.
+
     Returns:
-        bool: True if successful, False otherwise.
+        bool: The return value. True for success, False otherwise.
 
-        The return type is optional and may be specified at the beginning of
-        the ``Returns`` section followed by a colon.
+    .. _PEP 484:
+        https://www.python.org/dev/peps/pep-0484/
 
-        The ``Returns`` section may span multiple lines and paragraphs.
-        Following lines should be indented to match the first line.
-
-        The ``Returns`` section supports any reStructuredText formatting,
-        including literal blocks::
-
-            {
-                'param1': param1,
-                'param2': param2
-            }
     """
     sgGrps = pm.ls(type='shadingEngine')
     validSgGrp = []
     for sg in sgGrps:
         if sg.name() != 'initialParticleSE' and sg.name() != 'initialShadingGroup':
             validSgGrp.append(sg)
-    return validSgGrp        
             
+    return validSgGrp        
+
 def getShaderInfo(sg):
     surface      = sg.surfaceShader.inputs()
     displacement = sg.displacementShader.inputs()
@@ -221,7 +220,7 @@ def importYeti(path):
         pm.select(yetiParent)
         surfaceShader = pm.PyNode(shaderName)
         pm.hyperShade(assign=surfaceShader)
-            
+      
 
     
     
