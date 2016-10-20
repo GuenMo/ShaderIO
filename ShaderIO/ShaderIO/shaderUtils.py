@@ -3,6 +3,28 @@
 import pymel.all as pm
 import json
 
+def testFucn(arg1, arg2):
+    """테스트 함수
+    
+    :param arg1: 정수
+    :type arg1: int
+    :param arg2: 부동소수
+    :type arg2: float
+    :returns: arg1  + arg2
+    :rtype: float
+    
+    Examples
+    --------
+    ``Examples`` should be written in doctest format, and should illustrate how
+    to use the function.
+
+    >>> print([i for i in example_generator(4)])
+    [0, 1, 2, 3]
+    """
+    return arg1  + arg2
+
+
+
 def getShadingEngine():
     """씬안에 Shadeing Engine을 검색해 리턴 한다.
     
