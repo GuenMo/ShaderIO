@@ -1,48 +1,56 @@
 # coding:utf-8
 
-from PySide import QtGui, QtCore
+try:
+    from PySide.QtGui import *
+    from PySide.QtCore import *
+    from shiboken import wrapInstance
+except:
+    from PySide2.QtGui import *
+    from PySide2.QtCore import *
+    from PySide2.QtWidgets import *
+    from shiboken2 import wrapInstance
+    
 import os.path
 import maya.OpenMayaUI as OpenMayaUI
-from shiboken import wrapInstance
 
 import shaderUtils
 reload(shaderUtils)
 
 def getMayaWindow():
     ptr = OpenMayaUI.MQtUtil.mainWindow()
-    return wrapInstance(long(ptr), QtGui.QMainWindow)
+    return wrapInstance(long(ptr), QMainWindow)
 
 
-class ShaderUI(QtGui.QDialog):
+class ShaderUI(QDialog):
     def __init__(self, parent=getMayaWindow()):
         super(ShaderUI, self).__init__(parent)
     
         # Window
         self.setWindowTitle('Shader IO')
-        #self.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)
+        #self.setWindowFlags(Qt.WindowStaysOnTopHint)
         self.setFixedWidth(200) 
         self.setFixedHeight(80)
         
         # Layout
-        mainLayout = QtGui.QVBoxLayout()
+        mainLayout = QVBoxLayout()
         mainLayout.setContentsMargins(5,5,5,5)
         mainLayout.setSpacing(5)
-        mainLayout.setAlignment(QtCore.Qt.AlignTop)
+        mainLayout.setAlignment(Qt.AlignTop)
         
-        typeLayout = QtGui.QHBoxLayout()
-        typeLabel  = QtGui.QLabel('Type:')
-        self.modRadioBttn  = QtGui.QRadioButton('Model')
-        self.hairRadioBttn = QtGui.QRadioButton('Yeti')
+        typeLayout = QHBoxLayout()
+        typeLabel  = QLabel('Type:')
+        self.modRadioBttn  = QRadioButton('Model')
+        self.hairRadioBttn = QRadioButton('Yeti')
         self.modRadioBttn.setChecked(True)
-        self.typeBttnGrp   = QtGui.QButtonGroup()
+        self.typeBttnGrp   = QButtonGroup()
         self.typeBttnGrp.addButton(self.modRadioBttn)
         self.typeBttnGrp.addButton(self.hairRadioBttn)
         typeLayout.addWidget(typeLabel)
         typeLayout.addWidget(self.modRadioBttn)
         typeLayout.addWidget(self.hairRadioBttn)
         
-        self.exportBttn = QtGui.QPushButton('Export Shader')
-        self.importBttn = QtGui.QPushButton('Import Shader')
+        self.exportBttn = QPushButton('Export Shader')
+        self.importBttn = QPushButton('Import Shader')
         
         mainLayout.addLayout(typeLayout)
         mainLayout.addWidget(self.exportBttn)
@@ -56,7 +64,7 @@ class ShaderUI(QtGui.QDialog):
     
     def exportShader(self):
         checked = self.typeBttnGrp.checkedButton().text()
-        fileDir = QtGui.QFileDialog.getSaveFileName(self, caption = 'Export Shaders', filter=('*.mb'))[0]
+        fileDir = QFileDialog.getSaveFileName(self, caption = 'Export Shaders', filter=('*.mb'))[0]
         if fileDir:
             if checked == 'Model':
                 shaderUtils.exportShader(fileDir)
@@ -67,7 +75,7 @@ class ShaderUI(QtGui.QDialog):
         
     def importShader(self):
         checked = self.typeBttnGrp.checkedButton().text()
-        fileDir = QtGui.QFileDialog.getOpenFileName(self, caption = 'Import Shaders', filter=('*.mb'))[0]
+        fileDir = QFileDialog.getOpenFileName(self, caption = 'Import Shaders', filter=('*.mb'))[0]
         if fileDir:
             if os.path.exists(fileDir):
                 if checked == 'Model':
